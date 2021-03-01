@@ -1,4 +1,4 @@
-#Otázky zo zadania
+# Otázky zo zadania
 ## 1) Aký je najmenší počet synchronizačných objektov (semafory, mutexy, udalosti) potrebných na riešenie tejto úlohy?
 
 Najmenší počet potrebných synchronizačných objektov je rovný počtu vlákien. V mojom riešení som použil o dva semafory/udalosti viac pre zjednodušenie kódu, ale semafory/udalosti pre prvý a druhý prvok fibonacciho postupnosti by sa dali odstrániť.
