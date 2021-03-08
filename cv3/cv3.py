@@ -18,7 +18,7 @@ def produce(shared_object, time):
         shared_object.mutex.lock()
 
         shared_object.buffer.append(1)
-        print('produced')
+
         shared_object.mutex.unlock()
         shared_object.full.signal()
 
@@ -29,7 +29,7 @@ def consume(shared_object, time):
         shared_object.mutex.lock()
 
         shared_object.buffer.pop(0)
-        print('consumed')
+
         shared_object.mutex.unlock()
         shared_object.empty.signal()
 
