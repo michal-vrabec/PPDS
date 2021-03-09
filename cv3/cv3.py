@@ -76,11 +76,11 @@ df = pd.DataFrame(columns=['producers', 'consumers', 'production_time',
                            'consumption_time', 'capacity', 'produced', 'consumed'])
 
 for i in range(cycle_max):
-    number_of_producers = randint(1, 10)
-    number_of_consumers = randint(1, 10)
-    production_time = randint(1, 10)
-    consumption_time = randint(1, 10)
-    capacity = randint(1, 10)
+    number_of_producers = randint(1, 15)
+    number_of_consumers = randint(1, 15)
+    production_time = randint(1, 15)
+    consumption_time = randint(1, 15)
+    capacity = randint(1, 15)
 
     df.loc[i] = [number_of_producers, number_of_consumers, production_time, consumption_time,
                  capacity, 0, 0]
