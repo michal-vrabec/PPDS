@@ -11,13 +11,19 @@ class Shared(object):
         self.barber = Semaphore(0)
         self.barber_done = Semaphore(0)
         self.customer_done = Semaphore(0)
+        self.queue = []
         self.mutex = Mutex()
+        self.queue_mutex = Mutex()
 
 
 def barber(shared):
     while True:
         shared.customer.wait()
-        shared.barber.signal()
+
+        shared.queue_mutex.lock()
+        barber_semaphore = shared.queue.pop(0)
+        shared.queue_mutex.unlock()
+        barber_semaphore.signal()
 
         cut_hair()
 
@@ -35,8 +41,13 @@ def customer(shared, cid):
     shared.customers += 1
     shared.mutex.unlock()
 
+    barber_semaphore = Semaphore(0)
+    shared.queue_mutex.lock()
+    shared.queue.append(barber_semaphore)
+    shared.queue_mutex.unlock()
+
     shared.customer.signal()
-    shared.barber.wait()
+    barber_semaphore.wait()
 
     get_haircut(cid)
 
