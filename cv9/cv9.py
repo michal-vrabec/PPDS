@@ -4,6 +4,7 @@ from PIL import Image
 import numpy
 import copy
 from numba import cuda
+import time
 
 
 def to_greyscale(pix):
@@ -26,11 +27,15 @@ def to_greyscale_cuda(pix, grey):
 
 
 if __name__ == "__main__":
-    # image = Image.open('input.jpeg')
-    # pixels = numpy.array(image)
-    # pixels = to_greyscale(pixels)
-    # output = Image.fromarray(pixels)
-    # output.save('output.jpg')
+    image = Image.open('input.jpeg')
+    pixels = numpy.array(image)
+
+    start_time = time.time()
+    pixels = to_greyscale(pixels)
+    print("Sequential time: %s seconds" % (time.time() - start_time))
+
+    output = Image.fromarray(pixels)
+    output.save('output.jpg')
 
     image = Image.open('input.jpeg')
     pixels = numpy.array(image)
@@ -41,7 +46,9 @@ if __name__ == "__main__":
     blockspergrid_y = int(math.ceil(pixels.shape[1] / threadsperblock[1]))
     blockspergrid = (blockspergrid_x, blockspergrid_y)
 
+    start_time = time.time()
     to_greyscale_cuda[blockspergrid, threadsperblock](pixels, greyscale)
+    print("CUDA time: %s seconds" % (time.time() - start_time))
 
     output = Image.fromarray(greyscale)
     output.save('output.jpg')
