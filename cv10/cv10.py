@@ -7,16 +7,6 @@ from numba import cuda
 import time
 
 
-def to_greyscale(pix):
-    for i, row in enumerate(pix):
-        for j, column in enumerate(row):
-            grey = (pix[i][j][0] * 0.299) + (pix[i][j][1] * 0.587) + (pix[i][j][2] * 0.114)
-            pix[i][j][0] = grey
-            pix[i][j][1] = grey
-            pix[i][j][2] = grey
-    return pix
-
-
 @cuda.jit
 def to_greyscale_cuda(pix, grey):
     x, y = cuda.grid(2)
@@ -27,16 +17,6 @@ def to_greyscale_cuda(pix, grey):
 
 
 if __name__ == "__main__":
-    image = Image.open('input.jpeg')
-    pixels = numpy.array(image)
-
-    start_time = time.time()
-    pixels = to_greyscale(pixels)
-    print("Sequential time: %s seconds" % (time.time() - start_time))
-
-    output = Image.fromarray(pixels)
-    output.save('output.jpg')
-
     image = Image.open('input.jpeg')
     pixels = numpy.array(image)
     greyscale = copy.deepcopy(pixels)
