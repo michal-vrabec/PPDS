@@ -5,6 +5,7 @@ import numpy
 import copy
 from numba import cuda
 import time
+import glob
 
 
 @cuda.jit
@@ -17,9 +18,13 @@ def to_greyscale_cuda(pix, grey):
 
 
 if __name__ == "__main__":
-    image = Image.open('input.jpeg')
-    pixels = numpy.array(image)
-    greyscale = copy.deepcopy(pixels)
+    image_paths = (glob.glob("images/*.jpg"))
+    images = []
+    for image_path in image_paths:
+        image = Image.open(image_path)
+        pixels = numpy.array(image)
+        greyscale = copy.deepcopy(pixels)
+        images.append({"pixels": pixels, "greyscale": greyscale})
 
     threadsperblock = (16, 16)
     blockspergrid_x = int(math.ceil(pixels.shape[0] / threadsperblock[0]))
